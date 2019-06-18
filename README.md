@@ -1,6 +1,5 @@
 # Fundare
 
-Write the project title and the team members’ names in Readme file under the Code Tab
 
 Project Name: Fundare 
 
