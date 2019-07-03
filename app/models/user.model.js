@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 const mongoose = require("mongoose");
-const user_location_data = require("./location.model");
+//const user_location_data = require("./location.model");
 const Schema = mongoose.Schema;
 
 // Create Schema
