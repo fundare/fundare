@@ -14,3 +14,7 @@
 ### Assignment 1
 
 #### [YouTube Video](https://www.youtube.com/watch?v=axnDtkIETxA&t=2s)
+
+### Assignment 2
+
+#### [YouTube Video](https://youtu.be/50llRFXkDtA)
