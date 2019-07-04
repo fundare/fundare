@@ -2,7 +2,7 @@
 
 /*jshint esversion: 6 */
 const express = require("express");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
@@ -19,16 +19,16 @@ app.use(
 app.use(bodyParser.json());
 
 // DB Config
+const db = require("./config/keys").mongoURI;
+
 // Connect to MongoDB
-const MongoClient = require("mongodb").MongoClient;
-const uri = require("./config/keys").mongoURI;
-const mongo = new MongoClient(uri, { useNewUrlParser: true });
+mongoose
+    .connect(
+        db, { useNewUrlParser: true }
+    )
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
 
-
-mongo.connect(err => {
-    const db_collection = mongo.db("fundare").collection("user_credentials");
-    client.close();
-});
 
 // Passport middleware
 app.use(passport.initialize());
@@ -38,12 +38,6 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
-
-db.collection("user_credentials").insertOne(users, (err, result) => {
-    if (err) return console.log(err);
-    console.log("User registered!");
-    console.log(results);
-});
 
 const port = process.env.PORT || 5000;
 
