@@ -1,21 +1,23 @@
 #!/usr/bin/env nodejs
 
 /*jshint esversion: 6 */
-const app = require('./app.js');
-
-const bodyParser = require('body-parser');
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const passport = require("passport");
-const users = require("./routes/api/users");
-const cors = require('cors');
-const mongoose = require('mongoose');
 
-app.use(cors());
-app.use(bodyParser.json());
+const users = require("./routes/api/users");
+
+const app = express();
+
+// Bodyparser middleware
 app.use(
     bodyParser.urlencoded({
         extended: false
     })
 );
+app.use(bodyParser.json());
+
 // DB Config
 const db = require("./config/keys").mongoURI;
 
@@ -36,6 +38,12 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 
-const port = process.env.PORT || 3000;
+db.collection("user_credentials").insertOne(users, (err, result) => {
+    if (err) return console.log(err);
+    console.log("User registered!");
+    console.log(results);
+});
 
-app.listen(port, () => console.log(`Server up and running on port ${port}!`));
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => console.log(`Server up and running on port ${port} !`));
