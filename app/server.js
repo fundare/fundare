@@ -4,24 +4,38 @@
 const app = require('./app.js');
 
 const bodyParser = require('body-parser');
+const passport = require("passport");
+const users = require("./routes/api/users");
 const cors = require('cors');
 const mongoose = require('mongoose');
-// const fundareRoutes = express.Router();
-const port = process.env.PORT || 3000;
-
-// let user_schema = require('./models/user.model');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(
+    bodyParser.urlencoded({
+        extended: false
+    })
+);
+// DB Config
+const db = require("./config/keys").mongoURI;
 
-mongoose.connect('mongodb://127.0.0.1:27017/fundare', { useNewUrlParser: true });
-const connection = mongoose.connection;
+// Connect to MongoDB
+mongoose
+    .connect(
+        db, { useNewUrlParser: true }
+    )
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
 
-connection.once('open', () => {
-    console.log("MongoDB database connection established successfully.");
-});
+// Passport middleware
+app.use(passport.initialize());
 
+// Passport config
+require("./config/passport")(passport);
 
-app.listen(port, () => {
-    console.log("Server is running on Port " + port + ".");
-});
+// Routes
+app.use("/api/users", users);
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => console.log(`Server up and running on port ${port}!`));
