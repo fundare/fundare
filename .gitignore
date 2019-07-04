@@ -1,5 +1,4 @@
 app/node_modules
 .vscode
-app/config/keys.js
 .eslintrc.json
 fundare-env
