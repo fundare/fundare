@@ -1,0 +1,10 @@
+{
+ "git.ignoreLimitWarning": true,
+ "eslint.enable": true,
+ "activationEvents": [
+  "workspaceContains:node_modules/.bin/jest",
+  "workspaceContains:node_modules/react-scripts/node_modules/.bin/jest",
+  "workspaceContains:node_modules/react-native-scripts",
+  "onCommand:io.orta.jest.start"
+],
+}
