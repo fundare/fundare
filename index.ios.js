@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
+
 import {
   AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
-  TextInput,
   TouchableOpacity
 } from 'react-native';
 
 const background = require("./logo.png");
-const lockIcon = require("./lock.png");
-const personIcon = require("./person.png");
 
-export default class FundareReactNative extends Component {
+export default class WelcomeScreen extends Component {
+
   render() {
     return (
       <View style={styles.container}>
@@ -22,49 +21,26 @@ export default class FundareReactNative extends Component {
           source={background}
           resizeMode="cover"
         />
-        <View style={styles.container} />
         <View style={styles.wrapper}>
-          <View style={styles.inputWrap}>
-            <View style={styles.iconWrap}>
-              <Image
-                source={personIcon}
-                style={styles.icon}
-                resizeMode="contain"
-              />
+          <View style={styles.selectionWrap}>
+            <View style={styles.loginWrap}>
+              <TouchableOpacity activeOpacity={.5}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-            <TextInput
-              placeholder="Username"
-              style={styles.input}
-              underlineColorAndroid="transparent"
-            />
+            <View style={styles.selectionWrap}>
+              <View style={styles.loginWrap}>
+                <TouchableOpacity activeOpacity={.5}>
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>Register</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-          <View style={styles.inputWrap}>
-            <View style={styles.iconWrap}>
-              <Image
-                source={lockIcon}
-                style={styles.icon}
-                resizeMode="contain"
-              />
-            </View>
-            <TextInput
-              placeholder="Password"
-              secureTextEntry
-              style={styles.input}
-              underlineColorAndroid="transparent"
-            />
-          </View>
-          <TouchableOpacity activeOpacity={.5}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Sign In</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={.5}>
-            <View>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </View>
-          </TouchableOpacity>
         </View>
-        <View style={styles.container} />
       </View>
     );
   }
@@ -82,26 +58,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 1
   },
-  inputWrap: {
+  selectionWrap: {
     flexDirection: "row",
     marginVertical: 10,
     height: 40,
     backgroundColor: "transparent"
   },
-  input: {
-    flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: '#FFF'
-  },
-  iconWrap: {
+  loginWrap: {
     paddingHorizontal: 7,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#000"
-  },
-  icon: {
-    width: 20,
-    height: 20,
   },
   button: {
     backgroundColor: "#000",
@@ -113,12 +80,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     fontSize: 18
-  },
-  forgotPasswordText: {
-    color: "#FFF",
-    backgroundColor: "transparent",
-    textAlign: "center"
   }
 });
 
-AppRegistry.registerComponent('FundareReactNative', () => FundareReactNative);
+AppRegistry.registerComponent('WelcomeScreen', () => WelcomeScreen);
