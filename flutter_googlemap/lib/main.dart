@@ -166,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void onGoToDeckButtonPressed() { // new
     setState(() {
       var carLocation;
+      routePolyline.clear();
       Geolocator().getCurrentPosition().then((currloc) { // get user's current location below
         currentLocation = currloc;
         DatabaseServices().getCarLocation().then((carloc) { // get car location from database, has fields latitude, longitude, altitude
