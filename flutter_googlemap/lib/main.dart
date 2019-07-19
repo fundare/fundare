@@ -24,11 +24,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool mapToggle = false;
   Set<Marker> carMarker = Set<Marker>();
-//  bool clientsToggle = false;
-//  bool resetToggle = false;
-
   var currentLocation;
-
   GoogleMapController mapController;
 
   void initState() {
@@ -41,49 +37,42 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Map Demo'),
+          title: Text('Cu'),
         ),
-        body: Column(
-            children: <Widget>[
-                    Container(
-                        height: MediaQuery.of(context).size.height - 280.0,
-                        width: double.infinity,
-                        child: mapToggle
-                            ? GoogleMap(
-                            onMapCreated: onMapCreated,
-                            initialCameraPosition: CameraPosition(
-                                target: LatLng(currentLocation.latitude, currentLocation.longitude),
-                                zoom: 10.0),
-                            myLocationEnabled: true,
-                            myLocationButtonEnabled: true,
-                            markers: carMarker
-                            )
-                            : Center(
-                            child: Text(
-                              'Loading.. Please wait..',
-                              style: TextStyle(fontSize: 20.0),
-                            ))
-                    ),
-                    SizedBox(height:5.0),
-                    FlatButton(
+        body: Column(children: <Widget>[
+          Container(
+              height: MediaQuery.of(context).size.height - 280.0,
+              width: double.infinity,
+              child: mapToggle
+                  ? GoogleMap(
+                      onMapCreated: onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                          target: LatLng(currentLocation.latitude,
+                              currentLocation.longitude),
+                          zoom: 10.0),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      markers: carMarker)
+                  : Center(
                       child: Text(
-                          'Mark my Car!',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold
-                          )
-                      ),
-                      color: Colors.transparent,
-                      onPressed: onAddMarkerButtonPressed,
-                    )
-              ])
-        );
+                      'Loading.. Please wait..',
+                      style: TextStyle(fontSize: 20.0),
+                    ))),
+          SizedBox(height: 5.0),
+          FlatButton(
+            child: Text('Mark my Car!',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold)),
+            color: Colors.transparent,
+            onPressed: onAddMarkerButtonPressed,
+          )
+        ]));
   }
 
   void onAddMarkerButtonPressed() {
@@ -96,19 +85,22 @@ class _MyHomePageState extends State<MyHomePage> {
           carMarker.add(Marker(
             // This marker id can be anything that uniquely identifies each marker.
             markerId: MarkerId('usercar'),
-            position: LatLng(currentLocation.latitude, currentLocation.longitude),
+            position:
+                LatLng(currentLocation.latitude, currentLocation.longitude),
             infoWindow: InfoWindow(
-              title: 'My Car',
-              snippet: 'latitude: '+currentLocation.latitude.toString()+','
-              +'longitude: '+currentLocation.longitude.toString()+','
-              +'altitude: '+currentLocation.altitude.toString()
-            ),
+                title: 'Your Car',
+                snippet: 'latitude: ' +
+                    currentLocation.latitude.toString() +
+                    ',' +
+                    'longitude: ' +
+                    currentLocation.longitude.toString() +
+                    ',' +
+                    'altitude: ' +
+                    currentLocation.altitude.toString()),
             icon: BitmapDescriptor.defaultMarker,
           ));
         });
       });
-
-
     });
   }
 
