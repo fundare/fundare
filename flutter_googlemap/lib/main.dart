@@ -194,6 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void createRoute(String encodedPoly){ // new
     setState(() {
+      routePolyline.clear();
       routePolyline.add(Polyline(polylineId: PolylineId('myRoute'),
           width: 5,
           points: convertToLatLng(decodePoly(encodedPoly)),
