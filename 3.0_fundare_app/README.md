@@ -43,19 +43,6 @@ Fundare Flutter Development - Getting Started
   open -a Simulator
   flutter run
   ```
-### How to Install Fundare (Android)
-1. Follow steps 1 & 2 from above.
-
-2. Navigate via command line, git bash or powershell to the repo, and run the following commands:
-   ```
-   cd 3.0_fundare_app
-   flutter build apk
-   ```
-3. Connect an Android device or run an Android emulator via Android studio and run this command:
-   ```
-   flutter run
-   ```
-
 That's it! :) Enjoy!
 
 ----------------------
