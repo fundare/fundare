@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
                                                 color: Colors.red),
                                           ),
                                           content: Text(
-                                            'Invalid email address. Please try again or register.',
+                                            'Database error! Please try again.',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.red),
@@ -123,13 +123,13 @@ class _LoginFormState extends State<LoginForm> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: Text(
-                                        'Error',
+                                        'Login Error',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
                                       ),
                                       content: Text(
-                                        'Invalid email address. Please try again or register.',
+                                        'Invalid email address or password. Please try again or register.',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
