@@ -129,7 +129,9 @@ class _UserPageState extends State<UserPage> {
                       polylines: routePolyline)
                   : Center(
                       child: Text(
-                      'Loading.. Please wait..\nPlease be aware of your surroundings!',
+                      'Loading.. Please wait..' +
+                          '\n' +
+                          '    Please be aware of your surroundings!',
                       style: TextStyle(fontSize: 20.0),
                     ))),
           // SizedBox(height: 5.0),
