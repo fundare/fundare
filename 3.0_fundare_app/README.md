@@ -10,38 +10,51 @@ Technical Specifications
   * Database: Firebase Cloud Database, Firestore
   * APIs: Google Location, Google Elevation
 
-## Fundare: Helping Lost Vehicles Find the Way Home. Built using [Flutter.io](https://flutter.io)
+## Fundare: Helping Lost Vehicles Find their Owners. Built using [Flutter.io](https://flutter.io)
 
 Fundare Flutter Development - Getting Started 
 
-### How to Install Fundare_Flutter
+### How to Install Fundare (iOS)
 1. Install Flutter & Dependencies 
    - See [How to Install Flutter](./README/FLUTTER.md)
 
 2. Clone this repo to your machine.
    ```
-   git clone https://github.com/bnonni/Fundare_Flutter
+   git clone https://github.com/fundare/fundare
    ```
 
-3. In the repo, run the following command:
+3. Open terminal, navigate to the repo folder you just cloned, and run the following commands:
    ```
+   cd 3.0_fundare_app
    flutter build ios
    ```
 
-3. Either connect an iPhone directly to your computer or run the iOS simulator, and run the app:
+3. Either connect an iPhone directly to your computer or run the iOS simulator:
   - With an iPhone connected to your computer, open Xcode and navigate to "Window > Devices & Simulators." Uncheck the "Connect via Network" option:
   ![Connect via Network](./README/Xcode_disable.png)
   - Disable your phone's hotspot, if one is enabled. 
   - Disable wifi on your iPhone.
-  - Run the following command:
+  - Run the app using the following command:
   ```
   flutter run
   ```
-  - To use iOS Simulator app, simply run:
+  - To use iOS Simulator app:
   ```
   open -a Simulator
   flutter run
   ```
+### How to Install Fundare (Android)
+1. Follow steps 1 & 2 from above.
+
+2. Navigate via command line, git bash or powershell to the repo, and run the following commands:
+   ```
+   cd 3.0_fundare_app
+   flutter build apk
+   ```
+3. Connect an Android device or run an Android emulator via Android studio and run this command:
+   ```
+   flutter run
+   ```
 
 That's it! :) Enjoy!
 
