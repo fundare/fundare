@@ -117,33 +117,33 @@ class _LoginFormState extends State<LoginForm> {
                                             )
                                           ],
                                         );
-                                      })))
-                              .catchError((err) => showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        'Login Error',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                      ),
-                                      content: Text(
-                                        'Invalid email address or password. Please try again or register.',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                      ),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                          child: Text('Close'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        )
-                                      ],
-                                    );
-                                  }));
+                                      }))
+                                  .catchError((err) => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Login Error',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),
+                                          ),
+                                          content: Text(
+                                            'Invalid email address or password. Please try again or register.',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),
+                                          ),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text('Close'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      })));
                         }
                       },
                     ),
