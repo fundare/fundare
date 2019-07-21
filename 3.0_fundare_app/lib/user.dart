@@ -43,7 +43,7 @@ class _UserPageState extends State<UserPage> {
         currentLocation = currloc;
         mapToggle = true;
         //store initial location onLoad
-        GeoFirePoint userLocation = geo.point(
+        GeoFirePoint userloc = geo.point(
             latitude: currentLocation.latitude,
             longitude: currentLocation.longitude);
         _firestore
@@ -53,8 +53,8 @@ class _UserPageState extends State<UserPage> {
             .document('userLocation')
             .setData({
           "altitude": currentLocation.altitude,
-          "latitude": userLocation.latitude,
-          "longitude": userLocation.longitude,
+          "latitude": userloc.latitude,
+          "longitude": userloc.longitude,
         }, merge: true);
         // print(userLocation.longitude);
         // print(userLocation.latitude);
@@ -67,16 +67,16 @@ class _UserPageState extends State<UserPage> {
   void storeCarLocation(carLocation) {
     GeoFirePoint carloc = geo.point(
         latitude: carLocation.latitude, longitude: carLocation.longitude);
-    print(carloc);
+    // print(carloc);
     _firestore
         .collection('user_data')
         .document(currentUser.uid)
         .collection('onMarked_location')
         .document('carLocation')
         .setData({
-      "altitude": 267.9001121520996,
-      "latitude": 33.753891,
-      "longitude": -84.389412,
+      "altitude": carLocation.altitude,
+      "latitude": carloc.latitude,
+      "longitude": carloc.longitude,
     }, merge: true);
     // print(carLocation.longitude);
     // print(carLocation.latitude);
@@ -154,13 +154,13 @@ class _UserPageState extends State<UserPage> {
               width: 200,
               height: 35,
               child: RaisedButton(
-                child: Text('Go to Deck!',
+                child: Text('Go to Car!',
                     style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                         fontWeight: FontWeight.bold)),
                 color: Theme.of(context).primaryColor,
-                onPressed: onGoToDeckButtonPressed,
+                onPressed: onGoToCarButtonPressed,
               )),
           Positioned(
               top: 555,
@@ -168,13 +168,13 @@ class _UserPageState extends State<UserPage> {
               width: 200,
               height: 35,
               child: RaisedButton(
-                child: Text('Guide in Deck!',
+                child: Text('Find Car in Deck!',
                     style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                         fontWeight: FontWeight.bold)),
                 color: Theme.of(context).primaryColor,
-                onPressed: onGuideInDeckButtonPressed,
+                onPressed: onFindCarInDeckButtonPressed,
               )),
           Positioned(
               top: 30,
@@ -247,14 +247,14 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-  void onGoToDeckButtonPressed() {
+  void onGoToCarButtonPressed() {
     setState(() {
       // get car location from database, has fields latitude, longitude, altitude
       _firestore
           .collection('user_data')
           .document(currentUser.uid)
           .collection('onMarked_location')
-          .document('testCarLocation')
+          .document('carLocation')
           .get()
           .then((result) {
         carLat = result.data['latitude'];
@@ -264,6 +264,8 @@ class _UserPageState extends State<UserPage> {
         myGeolocator.getCurrentPosition().then((currloc) {
           // get user's current location below
           currentLocation = currloc;
+          zoomInMap(currentLocation.latitude, currentLocation.longitude, carLat,
+              carLong);
           GoogleMapsServices()
               .getRouteCoordinates(
                   LatLng(currentLocation.latitude, currentLocation.longitude),
@@ -292,16 +294,14 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-  void onGuideInDeckButtonPressed() {
+  void onFindCarInDeckButtonPressed() {
     double carLat, carLong, carAlt;
-    var locationOptions =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
     // get car location from database: latitude, longitude, altitude
     _firestore
         .collection('user_data')
         .document(currentUser.uid)
         .collection('onMarked_location')
-        .document('testCarLocation')
+        .document('carLocation')
         .get()
         .then((result) {
       carLat = result.data['latitude'];
