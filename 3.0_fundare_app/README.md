@@ -1,11 +1,11 @@
 # Fundare 
 
-Jawwad "Jay" Ahmed - Task 2
-Wendell "Jayson" Duffie - Task 3
-Huiwen Ju - Task 4
-Beena Pappachen - Task 5
-Bryan Nonni - Task 4
-Abrham Dejene - Task 1 & 6
+* Jawwad "Jay" Ahmed - Task 2
+* Wendell "Jayson" Duffie - Task 3
+* Huiwen Ju - Task 4
+* Beena Pappachen - Task 5
+* Bryan Nonni - Task 4
+* Abrham Dejene - Task 1 & 6
 
 Description & Purpose: 
   * Fundare helps users find their vehicles if they've forgotten where they've parked
