@@ -16,6 +16,7 @@ class _LoginFormState extends State<LoginForm> {
   final Firestore _firestore = Firestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser currentUser;
+  bool isLoading;
 
   @override
   initState() {
@@ -42,6 +43,17 @@ class _LoginFormState extends State<LoginForm> {
     } else {
       return null;
     }
+  }
+
+  Widget buildLoading() {
+    return isLoading
+        ? Container(
+            color: Colors.white.withOpacity(0.8),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : Container();
   }
 
   Widget build(BuildContext context) {
@@ -77,74 +89,58 @@ class _LoginFormState extends State<LoginForm> {
                       color: Theme.of(context).primaryColor,
                       textColor: Colors.white,
                       onPressed: () {
-                        if (_loginFormKey.currentState.validate()) {
-                          _firebaseAuth
-                              .signInWithEmailAndPassword(
-                                  email: emailInputController.text,
-                                  password: pwdInputController.text)
-                              .then((currentUser) => _firestore
-                                  .collection('user_data')
-                                  .document(currentUser.uid)
-                                  .get()
-                                  .then((DocumentSnapshot result) =>
-                                      Navigator.pushReplacement(
+                        setState(() {
+                          isLoading = true;
+                          buildLoading();
+                          if (_loginFormKey.currentState.validate()) {
+                            _firebaseAuth
+                                .signInWithEmailAndPassword(
+                                    email: emailInputController.text,
+                                    password: pwdInputController.text)
+                                .catchError((err) => showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'Login Error',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ),
+                                        content: Text(
+                                          'Invalid email address or password. Please try again or register.',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('Close'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    }))
+                                .then(
+                                  (currentUser) => _firestore
+                                      .collection('user_data')
+                                      .document(currentUser.uid)
+                                      .get()
+                                      .then(
+                                        (DocumentSnapshot result) =>
+                                            Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => UserPage(
-                                                  uid: currentUser.uid))))
-                                  .catchError((err) => showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Error',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red),
+                                            builder: (context) =>
+                                                UserPage(uid: currentUser.uid),
                                           ),
-                                          content: Text(
-                                            'Database error! Please try again.',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red),
-                                          ),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              child: Text('Close'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      }))
-                                  .catchError((err) => showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Login Error',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red),
-                                          ),
-                                          content: Text(
-                                            'Invalid email address or password. Please try again or register.',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red),
-                                          ),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              child: Text('Close'),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      })));
-                        }
+                                        ),
+                                      ),
+                                );
+                          }
+                        });
                       },
                     ),
                     Text("Don't have an account yet?"),
