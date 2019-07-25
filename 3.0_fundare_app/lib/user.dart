@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,6 +25,9 @@ class _UserPageState extends State<UserPage> {
   Set<Polyline> routePolyline = Set<Polyline>(); // new
   var myGeolocator = Geolocator();
   var currentLocation;
+  var testLatitude = 33.75522505,
+      testLongitude = -84.38670078,
+      testAltitude = 311.9;
   double carLat;
   double carLong;
   double carAlt;
@@ -160,13 +164,38 @@ class _UserPageState extends State<UserPage> {
             width: 200,
             height: 35,
             child: RaisedButton(
-                child: Text('Mark my Car',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                color: Theme.of(context).primaryColor,
-                onPressed: onAddMarkerButtonPressed),
+              child: Text('Mark my Car',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                onAddMarkerButtonPressed();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: Text(
+                          'Please wait...\n',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: Text(
+                          'Loading Your Location',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    });
+              },
+            ),
           ),
           Positioned(
             top: 507,
@@ -174,13 +203,38 @@ class _UserPageState extends State<UserPage> {
             width: 200,
             height: 35,
             child: RaisedButton(
-                child: Text('Navigate to Car!',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                color: Theme.of(context).primaryColor,
-                onPressed: onGoToCarButtonPressed),
+              child: Text('Navigate to Car!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                onGoToCarButtonPressed();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: Text(
+                          'Please wait...\n',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: Text(
+                          'Creating Your Route',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    });
+              },
+            ),
           ),
           Positioned(
             top: 555,
@@ -194,7 +248,31 @@ class _UserPageState extends State<UserPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold)),
                 color: Theme.of(context).primaryColor,
-                onPressed: onFindCarInDeckButtonPressed),
+                onPressed: () {
+                  onFindCarInDeckButtonPressed();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text(
+                            'Please wait...\n',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          content: Text(
+                            'Finding your altitude',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      });
+                }),
           ),
           Positioned(
               top: 30,
@@ -205,9 +283,22 @@ class _UserPageState extends State<UserPage> {
                   ? Center(
                       child: CustomPaint(
                           size: Size(100, 400),
-                          painter: MyPainter(
-                              carAlt, /*260.1*/ currentAlt, arriveDeckAlt)))
+                          painter: MyPainter(carAlt, 330.9, arriveDeckAlt)))
                   : Center()),
+          /*
+          start -> 305.9
+                -> 317.9
+                -> 329.9
+            end -> 330.9
+                
+                The height of each storey is based on the ceiling height of the rooms plus
+                the thickness of the floors between each pane. Generally this is around 14
+                feet (4.3 m) total; however, it varies widely from just under this figure 
+                to well over it depending on the type of building and the building techniques.
+
+          1 m = 3 ft, so 3 meters = ~ 1 "story", which is estimated @ ~10 feet
+          
+          */
           Positioned(
               top: -30,
               left: 30,
@@ -235,6 +326,7 @@ class _UserPageState extends State<UserPage> {
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/user');
+                    altitudeStream.cancel();
                   })),
           Positioned(
               top: 10,
@@ -263,24 +355,22 @@ class _UserPageState extends State<UserPage> {
           () {
             currentLocation = currloc;
             // storeCarLocation(currentLocation);
-            var latitude = 33.75522505,
-                longitude = -84.38670078,
-                altitude = 314;
+
             mapToggle = true;
             carMarker.clear();
             carMarker.add(
               Marker(
                 // This marker id can be anything that uniquely identifies each marker.
                 markerId: MarkerId('usercar'),
-                position: LatLng(latitude, longitude),
+                position: LatLng(testLatitude, testLongitude),
                 infoWindow: InfoWindow(
                     title: '   Your Car ',
                     snippet: '  Latitude: ' +
-                        latitude.toString().substring(0, 5) +
+                        testLatitude.toString().substring(0, 5) +
                         ',\nLongitude: ' +
-                        longitude.toString().substring(0, 6) +
+                        testLongitude.toString().substring(0, 6) +
                         ',\nAltitude: ' +
-                        altitude.toString()),
+                        testAltitude.toString()),
                 icon: BitmapDescriptor.defaultMarker,
               ),
             );
@@ -351,7 +441,7 @@ class _UserPageState extends State<UserPage> {
         .collection('user_data')
         .document(currentUser.uid)
         .collection('onMarked_location')
-        .document('carLocation')
+        .document('testCarLocation')
         .get()
         .then((result) {
       carLat = result.data['latitude'];
@@ -392,9 +482,9 @@ class _UserPageState extends State<UserPage> {
       // listen to stream
       altitudeStream = generateAltitudeStream(currentLocation.altitude)
           .listen((double alti) {
-        // setState(() {
-        currentAlt = alti;
-        // });
+        setState(() {
+          currentAlt = alti;
+        });
       });
     });
   }
