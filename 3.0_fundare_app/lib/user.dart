@@ -60,9 +60,6 @@ class _UserPageState extends State<UserPage> {
           "latitude": userloc.latitude,
           "longitude": userloc.longitude,
         }, merge: true);
-        // print(userLocation.longitude);
-        // print(userLocation.latitude);
-        // print(currentLocation.altitude);
       });
     });
   }
@@ -81,16 +78,12 @@ class _UserPageState extends State<UserPage> {
       "latitude": carloc.latitude,
       "longitude": carloc.longitude,
     }, merge: true);
-    // print(carLocation.longitude);
-    // print(carLocation.latitude);
-    // print(currentLocation.altitude);
   }
 
   // reusable function to store carLocation
   void storeCarLocation(carLocation) {
     GeoFirePoint carloc = geo.point(
         latitude: carLocation.latitude, longitude: carLocation.longitude);
-    // print(carloc);
     _firestore
         .collection('user_data')
         .document(currentUser.uid)
@@ -101,9 +94,6 @@ class _UserPageState extends State<UserPage> {
       "latitude": carloc.latitude,
       "longitude": carloc.longitude,
     }, merge: true);
-    // print(carLocation.longitude);
-    // print(carLocation.latitude);
-    // print(currentLocation.altitude);
   }
 
   //gets current user from Firebase
@@ -157,7 +147,6 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
           ),
-          // SizedBox(height: 5.0),
           Positioned(
             top: 460,
             left: 90,
@@ -285,19 +274,16 @@ class _UserPageState extends State<UserPage> {
                           size: Size(100, 400),
                           painter: MyPainter(carAlt, 330.9, arriveDeckAlt)))
                   : Center()),
-          /*
-          start -> 305.9
+
+          /*start -> 305.9
                 -> 317.9
                 -> 329.9
             end -> 330.9
-                
                 The height of each storey is based on the ceiling height of the rooms plus
                 the thickness of the floors between each pane. Generally this is around 14
                 feet (4.3 m) total; however, it varies widely from just under this figure 
                 to well over it depending on the type of building and the building techniques.
-
           1 m = 3 ft, so 3 meters = ~ 1 "story", which is estimated @ ~10 feet
-          
           */
           Positioned(
               top: -30,
