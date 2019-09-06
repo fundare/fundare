@@ -19,7 +19,7 @@ Technical Specifications
    - [login.dart](./3.0_fundare_app/lib/login.dart)
    - [register.dart](./3.0_fundare_app/lib/register.dart)
    - [user.dart](./3.0_fundare_app/lib/user.dart)
-   - [database_services.dart](./3.0_fundare_app/lib/database_services.dart) 
+   - [database_services.dart](./3.0_fundare_app/lib/user_services/database_services.dart) 
 2. [Huiwen Ju](https://www.github.com/haniaiguaiguai) - Frontend Engineer
    - **Responsibilities:** Google Maps, User Functionalities - Set Car Location, Find Car Location, Navigate to Car, Navigate in Deck 
    - [user.dart](./3.0_fundare_app/lib/user.dart) 
