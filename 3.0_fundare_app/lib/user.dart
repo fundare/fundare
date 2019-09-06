@@ -38,36 +38,36 @@ class _UserPageState extends State<UserPage> {
   void initState() {
     this.getCurrentUser();
     super.initState();
-    myGeolocator.getCurrentPosition().then((currloc) {
-      setState(() {
-        currentLocation = currloc;
-        mapToggle = true;
-        //store initial location onLoad
-        GeoFirePoint userloc = geo.point(
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude);
-        _firestore
-            .collection('user_data')
-            .document(currentUser.uid)
-            .collection('onLoad_location')
-            .document('userLocation')
-            .setData({
-          "altitude": currentLocation.altitude,
-          "latitude": userloc.latitude,
-          "longitude": userloc.longitude,
-        }, merge: true);
-        // print(userLocation.longitude);
-        // print(userLocation.latitude);
-        // print(currentLocation.altitude);
-      });
-    });
+    myGeolocator.getCurrentPosition().then(
+      (currloc) {
+        setState(
+          () {
+            currentLocation = currloc;
+            mapToggle = true;
+            //store initial location onLoad
+            GeoFirePoint userloc = geo.point(
+                latitude: currentLocation.latitude,
+                longitude: currentLocation.longitude);
+            _firestore
+                .collection('user_data')
+                .document(currentUser.uid)
+                .collection('onLoad_location')
+                .document('userLocation')
+                .setData({
+              "altitude": currentLocation.altitude,
+              "latitude": userloc.latitude,
+              "longitude": userloc.longitude,
+            }, merge: true);
+          },
+        );
+      },
+    );
   }
 
   // reusable function to store carLocation
   void storeCarLocation(carLocation) {
     GeoFirePoint carloc = geo.point(
         latitude: carLocation.latitude, longitude: carLocation.longitude);
-    // print(carloc);
     _firestore
         .collection('user_data')
         .document(currentUser.uid)
@@ -78,9 +78,6 @@ class _UserPageState extends State<UserPage> {
       "latitude": carloc.latitude,
       "longitude": carloc.longitude,
     }, merge: true);
-    // print(carLocation.longitude);
-    // print(carLocation.latitude);
-    // print(currentLocation.altitude);
   }
 
   //gets current user from Firebase
@@ -107,193 +104,249 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Fundare'),
-        ),
-        body: Stack(children: <Widget>[
+      appBar: AppBar(
+        title: Text('Fundare'),
+      ),
+      body: Stack(
+        children: <Widget>[
           Positioned(
-              top: 1,
-              left: 5,
-              width: 375,
-              height: 450,
-              child: mapToggle
-                  ? GoogleMap(
-                      onMapCreated: onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(currentLocation.latitude,
-                              currentLocation.longitude),
-                          zoom: 10.0),
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      markers: carMarker,
-                      polylines: routePolyline)
-                  : Center(
-                      child: Text(
-                      'Loading.. Please wait..' +
-                          '\n' +
-                          '    Please be aware of your surroundings!',
-                      style: TextStyle(fontSize: 20.0),
-                    ))),
-          // SizedBox(height: 5.0),
+            top: 1,
+            left: 5,
+            width: 375,
+            height: 450,
+            child: mapToggle
+                ? GoogleMap(
+                    onMapCreated: onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(currentLocation.latitude,
+                            currentLocation.longitude),
+                        zoom: 10.0),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    markers: carMarker,
+                    polylines: routePolyline)
+                : CircularProgressIndicator(
+                    strokeWidth: 4.0,
+                  ),
+          ),
           Positioned(
-              top: 460,
-              left: 90,
-              width: 200,
-              height: 35,
-              child: RaisedButton(
-                child: Text('Mark my Car!',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                color: Theme.of(context).primaryColor,
-                onPressed: onAddMarkerButtonPressed,
-              )),
-          // SizedBox(height: 5.0),
+            top: 460,
+            left: 90,
+            width: 200,
+            height: 35,
+            child: RaisedButton(
+              child: Text('Mark my Car!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              color: Theme.of(context).primaryColor,
+              onPressed: onAddMarkerButtonPressed,
+            ),
+          ),
           Positioned(
-              top: 507,
-              left: 90,
-              width: 200,
-              height: 35,
-              child: RaisedButton(
-                child: Text('Go to Car!',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                color: Theme.of(context).primaryColor,
-                onPressed: onGoToCarButtonPressed,
-              )),
+            top: 507,
+            left: 90,
+            width: 200,
+            height: 35,
+            child: RaisedButton(
+              child: Text('Go to Car!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              color: Theme.of(context).primaryColor,
+              onPressed: onGoToCarButtonPressed,
+            ),
+          ),
           Positioned(
-              top: 555,
-              left: 90,
-              width: 200,
-              height: 35,
-              child: RaisedButton(
-                child: Text('Find Car in Deck!',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-                color: Theme.of(context).primaryColor,
-                onPressed: onFindCarInDeckButtonPressed,
-              )),
+            top: 555,
+            left: 90,
+            width: 200,
+            height: 35,
+            child: RaisedButton(
+              child: Text('Find Car in Deck!',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              color: Theme.of(context).primaryColor,
+              onPressed: onFindCarInDeckButtonPressed,
+            ),
+          ),
           Positioned(
-              top: 30,
-              left: 30,
-              width: 100,
-              height: 400,
-              child: altitudeToggle
-                  ? Center(
-                      child: CustomPaint(
-                          size: Size(100, 400),
-                          painter:
-                              MyPainter(carAlt, currentAlt, arriveDeckAlt)))
-                  : Center()),
+            top: 30,
+            left: 30,
+            width: 100,
+            height: 400,
+            child: altitudeToggle
+                ? Center(
+                    child: CustomPaint(
+                      size: Size(100, 400),
+                      painter: MyPainter(carAlt, currentAlt, arriveDeckAlt),
+                    ),
+                  )
+                : Center(),
+          ),
           Positioned(
-              top: -30,
-              left: 30,
-              width: 100,
-              height: 100,
-              child: altitudeToggle
-                  ? Center(
-                      child: Text('Altitude',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)))
-                  : Center()),
-          Positioned(
-              top: 600,
-              left: 90,
-              width: 200,
-              height: 35,
-              child: RaisedButton(
-                  child: Text('Logout',
+            top: -30,
+            left: 30,
+            width: 100,
+            height: 100,
+            child: altitudeToggle
+                ? Center(
+                    child: Text(
+                      'Altitude',
                       style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold)),
-                  color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  })),
-        ]));
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Center(),
+          ),
+          Positioned(
+            top: 600,
+            left: 90,
+            width: 200,
+            height: 35,
+            child: RaisedButton(
+              child: Text(
+                'Reset',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/user');
+                altitudeStream.cancel();
+              },
+            ),
+          ),
+          Positioned(
+            top: 10,
+            left: 270,
+            width: 95,
+            height: 35,
+            child: RaisedButton(
+              child: Text(
+                'Logout',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   void onAddMarkerButtonPressed() {
-    setState(() {
-      myGeolocator.getCurrentPosition().then((currloc) {
-        setState(() {
-          currentLocation = currloc;
-          storeCarLocation(currentLocation);
-          mapToggle = true;
-          carMarker.clear();
-          carMarker.add(Marker(
-            // This marker id can be anything that uniquely identifies each marker.
-            markerId: MarkerId('usercar'),
-            position:
-                LatLng(currentLocation.latitude, currentLocation.longitude),
-            infoWindow: InfoWindow(
-                title: '   Your Car ',
-                snippet: '  Latitude: ' +
-                    currentLocation.latitude.toString().substring(0, 5) +
-                    ',\nLongitude: ' +
-                    currentLocation.longitude.toString().substring(0, 6) +
-                    ',\nAltitude: ' +
-                    currentLocation.altitude.toString().substring(0, 6)),
-            icon: BitmapDescriptor.defaultMarker,
-          ));
-        });
-      });
-    });
+    setState(
+      () {
+        myGeolocator.getCurrentPosition().then(
+          (currloc) {
+            setState(
+              () {
+                currentLocation = currloc;
+                storeCarLocation(currentLocation);
+                mapToggle = true;
+                carMarker.clear();
+                carMarker.add(
+                  Marker(
+                    // This marker id can be anything that uniquely identifies each marker.
+                    markerId: MarkerId('usercar'),
+                    position: LatLng(
+                        currentLocation.latitude, currentLocation.longitude),
+                    infoWindow: InfoWindow(
+                        title: '\tYour Car ',
+                        snippet: '\tLatitude: ' +
+                            currentLocation.latitude
+                                .toString()
+                                .substring(0, 5) +
+                            ',\nLongitude: ' +
+                            currentLocation.longitude
+                                .toString()
+                                .substring(0, 6) +
+                            ',\nAltitude: ' +
+                            currentLocation.altitude
+                                .toString()
+                                .substring(0, 6)),
+                    icon: BitmapDescriptor.defaultMarker,
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   void onGoToCarButtonPressed() {
-    setState(() {
-      // get car location from database, has fields latitude, longitude, altitude
-      _firestore
-          .collection('user_data')
-          .document(currentUser.uid)
-          .collection('onMarked_location')
-          .document('carLocation')
-          .get()
-          .then((result) {
-        carLat = result.data['latitude'];
-        carLong = result.data['longitude'];
-        carAlt = result.data['altitude'];
-        routePolyline.clear();
-        myGeolocator.getCurrentPosition().then((currloc) {
-          // get user's current location below
-          currentLocation = currloc;
-          zoomInMap(currentLocation.latitude, currentLocation.longitude, carLat,
-              carLong);
-          GoogleMapsServices()
-              .getRouteCoordinates(
-                  LatLng(currentLocation.latitude, currentLocation.longitude),
-                  LatLng(carLat, carLong))
-              .then((routeString) {
-            // get polyline points from Google
-            createRoute(routeString);
-            // update carMarker below
-            carMarker.clear();
-            carMarker.add(Marker(
-              markerId: MarkerId('usercar'),
-              position: LatLng(carLat, carLong),
-              infoWindow: InfoWindow(
-                  title: '   Your Car ',
-                  snippet: '  Latitude: ' +
-                      carLat.toString().substring(0, 5) +
-                      ',\nLongitude: ' +
-                      carLong.toString().substring(0, 6) +
-                      ',\nAltitude: ' +
-                      carAlt.toString().substring(0, 6)),
-              icon: BitmapDescriptor.defaultMarker,
-            ));
-          });
-        });
-      });
-    });
+    setState(
+      () {
+        // get car location from database, has fields latitude, longitude, altitude
+        _firestore
+            .collection('user_data')
+            .document(currentUser.uid)
+            .collection('onMarked_location')
+            .document('carLocation')
+            .get()
+            .then(
+          (result) {
+            carLat = result.data['latitude'];
+            carLong = result.data['longitude'];
+            carAlt = result.data['altitude'];
+            routePolyline.clear();
+            myGeolocator.getCurrentPosition().then(
+              (currloc) {
+                // get user's current location below
+                currentLocation = currloc;
+                zoomInMap(currentLocation.latitude, currentLocation.longitude,
+                    carLat, carLong);
+                GoogleMapsServices()
+                    .getRouteCoordinates(
+                        LatLng(currentLocation.latitude,
+                            currentLocation.longitude),
+                        LatLng(carLat, carLong))
+                    .then(
+                  (routeString) {
+                    // get polyline points from Google
+                    createRoute(routeString);
+                    // update carMarker below
+                    carMarker.clear();
+                    carMarker.add(
+                      Marker(
+                        markerId: MarkerId('usercar'),
+                        position: LatLng(carLat, carLong),
+                        infoWindow: InfoWindow(
+                            title: '\tYour Car ',
+                            snippet: '\tLatitude: ' +
+                                carLat.toString().substring(0, 5) +
+                                ',\nLongitude: ' +
+                                carLong.toString().substring(0, 6) +
+                                ',\nAltitude: ' +
+                                carAlt.toString().substring(0, 6)),
+                        icon: BitmapDescriptor.defaultMarker,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   void onFindCarInDeckButtonPressed() {
@@ -305,50 +358,62 @@ class _UserPageState extends State<UserPage> {
         .collection('onMarked_location')
         .document('carLocation')
         .get()
-        .then((result) {
-      carLat = result.data['latitude'];
-      carLong = result.data['longitude'];
-      carAlt = result.data['altitude'];
-      // get user's current location below
-      myGeolocator.getCurrentPosition().then((currloc) {
-        currentLocation = currloc;
-        print(currloc.altitude);
-        setState(() {
-          // clear polyline below
-          routePolyline.clear();
-          // update carMarker below
-          carMarker.clear();
-          carMarker.add(Marker(
-            markerId: MarkerId('usercar'),
-            position: LatLng(carLat, carLong),
-            infoWindow: InfoWindow(
-                title: 'My Car',
-                snippet: 'latitude: ' +
-                    carLat.toString().substring(0, 5) +
-                    ',' +
-                    'longitude: ' +
-                    carLong.toString().substring(0, 6) +
-                    ',' +
-                    'altitude: ' +
-                    carAlt.toString().substring(0, 6)),
-            icon: BitmapDescriptor.defaultMarker,
-          ));
-          // open altitude window below
-          arriveDeckAlt = currentLocation.altitude;
-          currentAlt = currentLocation.altitude;
-          altitudeToggle = true;
-          zoomInMap(currentLocation.latitude, currentLocation.longitude, carLat,
-              carLong);
-        });
-        // listen to stream
-        altitudeStream = generateAltitudeStream(currentLocation.altitude)
-            .listen((double alti) {
-          setState(() {
-            currentAlt = alti;
-          });
-        });
-      });
-    });
+        .then(
+      (result) {
+        carLat = result.data['latitude'];
+        carLong = result.data['longitude'];
+        carAlt = result.data['altitude'];
+        // get user's current location below
+        myGeolocator.getCurrentPosition().then(
+          (currloc) {
+            currentLocation = currloc;
+            print(currloc.altitude);
+            setState(
+              () {
+                // clear polyline below
+                routePolyline.clear();
+                // update carMarker below
+                carMarker.clear();
+                carMarker.add(
+                  Marker(
+                    markerId: MarkerId('usercar'),
+                    position: LatLng(carLat, carLong),
+                    infoWindow: InfoWindow(
+                        title: 'My Car',
+                        snippet: 'latitude: ' +
+                            carLat.toString().substring(0, 5) +
+                            ',' +
+                            'longitude: ' +
+                            carLong.toString().substring(0, 6) +
+                            ',' +
+                            'altitude: ' +
+                            carAlt.toString().substring(0, 6)),
+                    icon: BitmapDescriptor.defaultMarker,
+                  ),
+                );
+                // open altitude window below
+                arriveDeckAlt = currentLocation.altitude;
+                currentAlt = currentLocation.altitude;
+                altitudeToggle = true;
+                zoomInMap(currentLocation.latitude, currentLocation.longitude,
+                    carLat, carLong);
+              },
+            );
+            // listen to stream
+            altitudeStream =
+                generateAltitudeStream(currentLocation.altitude).listen(
+              (double alti) {
+                setState(
+                  () {
+                    currentAlt = alti;
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   void zoomInMap(double lati1, double longi1, double lati2, double longi2) {
@@ -356,31 +421,37 @@ class _UserPageState extends State<UserPage> {
     double deltaLati = (lati1 - lati2).abs();
     double deltaLongi = (longi1 - longi2).abs();
     double zoomFactor = 1;
-    mapController.animateCamera(CameraUpdate.newLatLngBounds(
-      LatLngBounds(
-        northeast: LatLng(
-            lati1 + zoomFactor * deltaLati, longi1 + zoomFactor * deltaLongi),
-        southwest: LatLng(
-            lati1 - zoomFactor * deltaLati, longi1 - zoomFactor * deltaLongi),
+    mapController.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          northeast: LatLng(
+              lati1 + zoomFactor * deltaLati, longi1 + zoomFactor * deltaLongi),
+          southwest: LatLng(
+              lati1 - zoomFactor * deltaLati, longi1 - zoomFactor * deltaLongi),
+        ),
+        50.0,
       ),
-      50.0,
-    ));
+    );
   }
 
   void createRoute(String encodedPoly) {
-    setState(() {
-      routePolyline.clear();
-      routePolyline.add(Polyline(
-          polylineId: PolylineId('myRoute'),
-          width: 5,
-          points: convertToLatLng(decodePoly(encodedPoly)),
-          color: Colors.black));
-    });
+    setState(
+      () {
+        routePolyline.clear();
+        routePolyline.add(Polyline(
+            polylineId: PolylineId('myRoute'),
+            width: 5,
+            points: convertToLatLng(decodePoly(encodedPoly)),
+            color: Colors.black));
+      },
+    );
   }
 
   void onMapCreated(controller) {
-    setState(() {
-      mapController = controller;
-    });
+    setState(
+      () {
+        mapController = controller;
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
 app/node_modules
 .vscode
 .eslintrc.json
-fundare-env
+fundare.env
