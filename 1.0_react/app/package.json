@@ -16,7 +16,7 @@
     "license": "ISC",
     "description": "find my car in parking lot app",
     "devDependencies": {
-        "acorn": "^6.1.1",
+        "acorn": "^6.4.1",
         "acorn-jsx": "^5.0.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
